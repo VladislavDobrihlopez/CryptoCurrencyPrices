@@ -4,6 +4,8 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import com.voitov.cryptoapp.api.ApiFactory
+import com.voitov.cryptoapp.utils.convertTimestampToTime
 
 @Entity(tableName = "full_price_list")
 data class CoinPriceInfo(
@@ -18,11 +20,11 @@ data class CoinPriceInfo(
     @PrimaryKey
     @SerializedName("FROMSYMBOL")
     @Expose
-    val fromSymbol: String? = null,
+    val fromSymbol: String,
 
     @SerializedName("TOSYMBOL")
     @Expose
-    val toSymbol: String? = null,
+    val toSymbol: String,
 
     @SerializedName("FLAGS")
     @Expose
@@ -30,11 +32,11 @@ data class CoinPriceInfo(
 
     @SerializedName("PRICE")
     @Expose
-    val price: Double? = null,
+    val price: Double,
 
     @SerializedName("LASTUPDATE")
     @Expose
-    val lastUpdate: Int? = null,
+    val lastUpdate: Long? = null,
 
     @SerializedName("MEDIAN")
     @Expose
@@ -195,4 +197,12 @@ data class CoinPriceInfo(
     @SerializedName("IMAGEURL")
     @Expose
     val imageUrl: String? = null,
-)
+) {
+    fun getFormattedTime(): String {
+        return convertTimestampToTime(lastUpdate)
+    }
+
+    fun getFullImageUrl(): String {
+        return ApiFactory.BASE_IMAGE_URL + imageUrl
+    }
+}
