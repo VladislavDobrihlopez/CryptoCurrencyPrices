@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">CryptoApp</string>
+    <string name="template_last_update_time">Last update time: %s</string>
+    <string name="there_is_a_coin_logo">123</string>
+</resources>

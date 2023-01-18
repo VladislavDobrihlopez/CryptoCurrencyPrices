@@ -6,6 +6,6 @@ import com.google.gson.annotations.SerializedName
 data class ListOfData(
     @SerializedName("Data")
     @Expose
-    private val data: List<Datum>? = null,
+    val data: List<Datum>? = null,
 )
 
