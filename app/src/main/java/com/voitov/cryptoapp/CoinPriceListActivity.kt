@@ -23,6 +23,17 @@ class CoinPriceListActivity : AppCompatActivity() {
         recyclerViewCoins = findViewById(R.id.recyclerViewCoins)
         val adapter = CoinPriceListAdapter(this)
         recyclerViewCoins.adapter = adapter
+        adapter.onClickListener = object : CoinPriceListAdapter.OnClickListener {
+            override fun onClick(coinPriceInfo: CoinPriceInfo) {
+                Log.d(TAG, coinPriceInfo.toString())
+                startActivity(
+                    CoinDetailsActivity.newIntent(
+                        this@CoinPriceListActivity,
+                        coinPriceInfo.fromSymbol
+                    )
+                )
+            }
+        }
 
         viewModel.getCoinData().observe(this, Observer {
             Log.d(TAG, it.toString())

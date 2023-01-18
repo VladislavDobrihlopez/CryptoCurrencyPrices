@@ -31,7 +31,7 @@ class CoinPriceListViewModel(application: Application) : AndroidViewModel(applic
     }
 
     private fun loadData() {
-        val disposable = ApiFactory.apiService.getListOfTopCoins(limit = 10)
+        val disposable = ApiFactory.apiService.getListOfTopCoins()
             .map {
                 it.data?.map { it.coinInfo?.name }?.joinToString(",") ?: throw Exception(
                     NullPointerException()

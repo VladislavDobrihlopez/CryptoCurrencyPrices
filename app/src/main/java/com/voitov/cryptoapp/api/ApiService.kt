@@ -25,7 +25,7 @@ interface ApiService {
         private const val QUERY_PARAM_LIMIT = "limit"
         private const val QUERY_PARAM_TO_SYMBOL = "tsym"
         private const val QUERY_PARAM_API_KEY = "api_key"
-        private const val LIMIT_DEFAULT = 10
+        private const val LIMIT_DEFAULT = 30
         private const val TO_SYMBOL_DEFAULT = "USD"
 
         private const val QUERY_PARAM_FROM_SYMBOLS = "fsyms"

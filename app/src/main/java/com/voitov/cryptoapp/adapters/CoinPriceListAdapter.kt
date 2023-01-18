@@ -13,6 +13,7 @@ import com.voitov.cryptoapp.pojo.coinDetails.CoinPriceInfo
 
 class CoinPriceListAdapter(private val context: Context) :
     RecyclerView.Adapter<CoinPriceListAdapter.CoinPriceViewHolder>() {
+    var onClickListener: OnClickListener? = null
     var coins: List<CoinPriceInfo> = listOf()
         set(value) {
             field = value
@@ -38,6 +39,9 @@ class CoinPriceListAdapter(private val context: Context) :
             Glide.with(itemView)
                 .load(coinPriceInfo.getFullImageUrl())
                 .into(imageViewCoinLogo)
+            itemView.setOnClickListener {
+                onClickListener?.onClick(coinPriceInfo)
+            }
         }
     }
 
@@ -56,5 +60,9 @@ class CoinPriceListAdapter(private val context: Context) :
             textViewPrice = itemView.findViewById(R.id.textViewPrice)
             textViewLastUpdateTime = itemView.findViewById(R.id.textViewLastUpdateTime)
         }
+    }
+
+    interface OnClickListener {
+        abstract fun onClick(coinPriceInfo: CoinPriceInfo)
     }
 }
