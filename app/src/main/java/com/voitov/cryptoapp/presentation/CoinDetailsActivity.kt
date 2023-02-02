@@ -1,4 +1,4 @@
-package com.voitov.cryptoapp
+package com.voitov.cryptoapp.presentation
 
 import android.content.Context
 import android.content.Intent
@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
+import com.voitov.cryptoapp.R
 
 class CoinDetailsActivity : AppCompatActivity() {
     private lateinit var viewModel: CoinPriceListViewModel
@@ -38,9 +39,9 @@ class CoinDetailsActivity : AppCompatActivity() {
             textViewToSymbol.text = it.toSymbol
             textViewMaxValueForWholeDay.text = it.highDay.toString()
             textViewLastDeal.text = it.lastMarket
-            textViewLastUpdateTime.text = it.getFormattedTime()
+            textViewLastUpdateTime.text = it.lastUpdate
             Glide.with(this@CoinDetailsActivity)
-                .load(it.getFullImageUrl())
+                .load(it.imageUrl)
                 .into(imageViewCoinLogo)
         }
     }

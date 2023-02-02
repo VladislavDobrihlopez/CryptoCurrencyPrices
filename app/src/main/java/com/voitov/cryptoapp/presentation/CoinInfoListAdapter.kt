@@ -1,4 +1,4 @@
-package com.voitov.cryptoapp.adapters
+package com.voitov.cryptoapp.presentation
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -9,45 +9,45 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.voitov.cryptoapp.R
-import com.voitov.cryptoapp.pojo.coinDetails.CoinPriceInfo
+import com.voitov.cryptoapp.domain.entities.CoinInfo
 
-class CoinPriceListAdapter(private val context: Context) :
-    RecyclerView.Adapter<CoinPriceListAdapter.CoinPriceViewHolder>() {
+class CoinInfoListAdapter(private val context: Context) :
+    RecyclerView.Adapter<CoinInfoListAdapter.CoinInfoListViewHolder>() {
     var onClickListener: OnClickListener? = null
-    var coins: List<CoinPriceInfo> = listOf()
+    var coins: List<CoinInfo> = listOf()
         set(value) {
             field = value
             notifyDataSetChanged()
         }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CoinPriceViewHolder {
-        return CoinPriceViewHolder(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CoinInfoListViewHolder {
+        return CoinInfoListViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.coin_item, parent, false)
         )
     }
 
-    override fun onBindViewHolder(holder: CoinPriceViewHolder, position: Int) {
-        val coinPriceInfo = coins[position]
+    override fun onBindViewHolder(holder: CoinInfoListViewHolder, position: Int) {
+        val coinInfo = coins[position]
         val lastUpdateTimePattern = context.resources.getString(R.string.template_last_update_time)
         val symbolsPattern = context.resources.getString(R.string.template_symbols)
         with(holder) {
-            textViewPrice.text = coinPriceInfo.price.toString()
+            textViewPrice.text = coinInfo.price.toString()
             textViewLastUpdateTime.text =
-                String.format(lastUpdateTimePattern, coinPriceInfo.getFormattedTime())
+                String.format(lastUpdateTimePattern, coinInfo.lastUpdate)
             textViewSymbols.text =
-                String.format(symbolsPattern, coinPriceInfo.fromSymbol, coinPriceInfo.toSymbol)
+                String.format(symbolsPattern, coinInfo.fromSymbol, coinInfo.toSymbol)
             Glide.with(itemView)
-                .load(coinPriceInfo.getFullImageUrl())
+                .load(coinInfo.imageUrl)
                 .into(imageViewCoinLogo)
             itemView.setOnClickListener {
-                onClickListener?.onClick(coinPriceInfo)
+                onClickListener?.onClick(coinInfo)
             }
         }
     }
 
     override fun getItemCount() = coins.size
 
-    inner class CoinPriceViewHolder(itemView: View) :
+    inner class CoinInfoListViewHolder(itemView: View) :
         RecyclerView.ViewHolder(itemView) {
         val imageViewCoinLogo: ImageView
         val textViewSymbols: TextView
@@ -63,6 +63,6 @@ class CoinPriceListAdapter(private val context: Context) :
     }
 
     interface OnClickListener {
-        abstract fun onClick(coinPriceInfo: CoinPriceInfo)
+        abstract fun onClick(coinInfo: CoinInfo)
     }
 }
