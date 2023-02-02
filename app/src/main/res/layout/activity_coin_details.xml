@@ -8,7 +8,7 @@
     android:paddingHorizontal="8dp"
     android:paddingTop="8dp"
     android:paddingBottom="16dp"
-    tools:context=".CoinDetailsActivity">
+    tools:context=".presentation.CoinDetailsActivity">
 
     <ImageView
         android:id="@+id/imageViewCoinLogo"

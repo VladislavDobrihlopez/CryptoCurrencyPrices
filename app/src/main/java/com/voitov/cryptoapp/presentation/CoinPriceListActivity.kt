@@ -1,4 +1,4 @@
-package com.voitov.cryptoapp
+package com.voitov.cryptoapp.presentation
 
 import android.os.Bundle
 import android.util.Log
@@ -6,8 +6,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
-import com.voitov.cryptoapp.adapters.CoinPriceListAdapter
-import com.voitov.cryptoapp.pojo.coinDetails.CoinPriceInfo
+import com.voitov.cryptoapp.R
+import com.voitov.cryptoapp.domain.entities.CoinInfo
 
 class CoinPriceListActivity : AppCompatActivity() {
     private val TAG = "CoinPriceListActivity"
@@ -21,15 +21,15 @@ class CoinPriceListActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(this).get(CoinPriceListViewModel::class.java)
         recyclerViewCoins = findViewById(R.id.recyclerViewCoins)
-        val adapter = CoinPriceListAdapter(this)
+        val adapter = CoinInfoListAdapter(this)
         recyclerViewCoins.adapter = adapter
-        adapter.onClickListener = object : CoinPriceListAdapter.OnClickListener {
-            override fun onClick(coinPriceInfo: CoinPriceInfo) {
-                Log.d(TAG, coinPriceInfo.toString())
+        adapter.onClickListener = object : CoinInfoListAdapter.OnClickListener {
+            override fun onClick(coinInfo: CoinInfo) {
+                Log.d(TAG, coinInfo.toString())
                 startActivity(
                     CoinDetailsActivity.newIntent(
                         this@CoinPriceListActivity,
-                        coinPriceInfo.fromSymbol
+                        coinInfo.fromSymbol
                     )
                 )
             }

@@ -1,10 +1,10 @@
-package com.voitov.cryptoapp.pojo.coins
+package com.voitov.cryptoapp.data.network.models
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-data class Datum(
+data class CoinNameHolderDto(
     @SerializedName("CoinInfo")
     @Expose
-    val coinInfo: CoinInfo? = null
+    val coinNameDto: CoinNameDto? = null
 )

@@ -1,12 +1,11 @@
-package com.voitov.cryptoapp.database
+package com.voitov.cryptoapp.data.database
 
 import android.app.Application
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.voitov.cryptoapp.pojo.coinDetails.CoinPriceInfo
 
-@Database(entities = [CoinPriceInfo::class], version = 1, exportSchema = false)
+@Database(entities = [CoinInfoDbModel::class], version = 1, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     companion object {
         private const val DB_NAME = "main.db"
@@ -27,5 +26,5 @@ abstract class AppDatabase : RoomDatabase() {
 
     }
 
-    abstract fun coinDetailsDao(): CoinDetailsDao
+    abstract fun coinInfo(): CoinInfoDao
 }
