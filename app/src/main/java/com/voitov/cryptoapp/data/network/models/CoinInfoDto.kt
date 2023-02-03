@@ -1,14 +1,12 @@
-package com.voitov.cryptoapp.pojo.coinDetails
+package com.voitov.cryptoapp.data.network.models
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
-import com.voitov.cryptoapp.api.ApiFactory
-import com.voitov.cryptoapp.utils.convertTimestampToTime
 
 @Entity(tableName = "full_price_list")
-data class CoinPriceInfo(
+data class CoinInfoDto(
     @SerializedName("TYPE")
     @Expose
     val type: String? = null,
@@ -197,12 +195,4 @@ data class CoinPriceInfo(
     @SerializedName("IMAGEURL")
     @Expose
     val imageUrl: String? = null,
-) {
-    fun getFormattedTime(): String {
-        return convertTimestampToTime(lastUpdate)
-    }
-
-    fun getFullImageUrl(): String {
-        return ApiFactory.BASE_IMAGE_URL + imageUrl
-    }
-}
+)
