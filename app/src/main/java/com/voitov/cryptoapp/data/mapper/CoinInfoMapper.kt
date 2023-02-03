@@ -7,7 +7,9 @@ import com.voitov.cryptoapp.data.network.models.CoinInfoDto
 import com.voitov.cryptoapp.data.network.models.CoinInfoJsonHolderDto
 import com.voitov.cryptoapp.data.network.models.CoinNamesListDto
 import com.voitov.cryptoapp.domain.entities.CoinInfo
-import com.voitov.cryptoapp.utils.convertTimestampToTime
+import java.sql.Timestamp
+import java.text.SimpleDateFormat
+import java.util.*
 
 class CoinInfoMapper {
     fun mapDtoToDbModel(coinInfoDto: CoinInfoDto): CoinInfoDbModel {
@@ -20,7 +22,7 @@ class CoinInfoMapper {
             highDay = coinInfoDto.highDay,
             lowDay = coinInfoDto.lowDay,
             lastMarket = coinInfoDto.lastMarket,
-            imageUrl = coinInfoDto.imageUrl,
+            imageUrl = ApiFactory.BASE_IMAGE_URL + coinInfoDto.imageUrl,
         )
     }
 
@@ -34,7 +36,7 @@ class CoinInfoMapper {
             highDay = CoinInfoDbModel.highDay,
             lowDay = CoinInfoDbModel.lowDay,
             lastMarket = CoinInfoDbModel.lastMarket,
-            imageUrl = ApiFactory.BASE_IMAGE_URL + CoinInfoDbModel.imageUrl,
+            imageUrl = CoinInfoDbModel.imageUrl,
         )
     }
 
@@ -70,5 +72,18 @@ class CoinInfoMapper {
 
     fun mapDbModelListToEntityList(dbModelList: List<CoinInfoDbModel>): List<CoinInfo> {
         return dbModelList.map { mapDbModelToEntity(it) }
+    }
+
+    private fun convertTimestampToTime(timestamp: Long?): String {
+        if (timestamp == null) {
+            return ""
+        }
+
+        val stamp = Timestamp(timestamp * 1000)
+        val pattern = "HH:mm:ss"
+        val date = Date(stamp.time)
+        val simpleDateFormat = SimpleDateFormat(pattern, Locale.getDefault())
+        simpleDateFormat.timeZone = TimeZone.getDefault()
+        return simpleDateFormat.format(date)
     }
 }
