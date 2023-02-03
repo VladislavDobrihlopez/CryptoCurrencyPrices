@@ -24,10 +24,6 @@ class CoinPriceListViewModel(application: Application) : AndroidViewModel(applic
     }
 
     init {
-        loadData()
-    }
-
-    private fun loadData() {
-        loadDataUseCase()
+        loadDataUseCase.invoke()
     }
 }
