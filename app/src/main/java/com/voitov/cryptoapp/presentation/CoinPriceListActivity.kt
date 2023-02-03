@@ -40,7 +40,6 @@ class CoinPriceListActivity : AppCompatActivity() {
     private fun setupViewModel() {
         viewModel = ViewModelProvider(this).get(CoinPriceListViewModel::class.java)
 
-
         viewModel.getCoinData().observe(this, Observer {
             Log.d(TAG, it.toString())
             adapter.submitList(it)

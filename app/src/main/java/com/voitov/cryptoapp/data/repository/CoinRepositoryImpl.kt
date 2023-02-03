@@ -3,20 +3,17 @@ package com.voitov.cryptoapp.data.repository
 import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
+import androidx.work.ExistingWorkPolicy
+import androidx.work.WorkManager
 import com.voitov.cryptoapp.data.database.AppDatabase
 import com.voitov.cryptoapp.data.mapper.CoinInfoMapper
-import com.voitov.cryptoapp.data.network.ApiFactory
+import com.voitov.cryptoapp.data.workers.RefreshDataWorker
 import com.voitov.cryptoapp.domain.CoinRepository
 import com.voitov.cryptoapp.domain.entities.CoinInfo
-import kotlinx.coroutines.delay
-import java.sql.Timestamp
-import java.text.SimpleDateFormat
-import java.util.*
 
 class CoinRepositoryImpl(
-    application: Application
+    private val application: Application
 ) : CoinRepository {
-    private val apiService = ApiFactory.apiService
     private val dao = AppDatabase.getInstance(application).coinInfo()
     private val mapper = CoinInfoMapper()
 
@@ -28,19 +25,13 @@ class CoinRepositoryImpl(
         }
     }
 
-    override suspend fun loadData() {
-        while (true) {
-            try {
-                val coinNamesListDto = apiService.getListOfTopCoins()
-                val fromSymbol = mapper.mapCoinNamesListDtoToString(coinNamesListDto)
-                val coinInfoJsonHolder = apiService.getCoinDetailsInfo(fromSymbol)
-                val coinInfoDtoList = mapper.mapJsonObjectToDtoList(coinInfoJsonHolder)
-                val coinInfoDbModelList = mapper.mapDtoListToDbModelList(coinInfoDtoList)
-                dao.insertCoinInfoList(coinInfoDbModelList)
-            } catch (e: Exception) {
-            }
-            delay(TIME_INTERVAL_IN_MILLIS)
-        }
+    override fun loadData() {
+        val workManager = WorkManager.getInstance(application)
+        workManager.enqueueUniqueWork(
+            RefreshDataWorker.NAME,
+            ExistingWorkPolicy.REPLACE,
+            RefreshDataWorker.makeRequest()
+        )
     }
 
     override fun getCoinInfo(fromSymbol: String): LiveData<CoinInfo> {
