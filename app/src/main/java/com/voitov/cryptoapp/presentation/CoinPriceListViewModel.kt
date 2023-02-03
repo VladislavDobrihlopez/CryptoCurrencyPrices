@@ -3,11 +3,13 @@ package com.voitov.cryptoapp.presentation
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.viewModelScope
 import com.voitov.cryptoapp.data.repository.CoinRepositoryImpl
 import com.voitov.cryptoapp.domain.entities.CoinInfo
 import com.voitov.cryptoapp.domain.usecases.GetCoinInfoListUseCase
 import com.voitov.cryptoapp.domain.usecases.GetCoinInfoUseCase
 import com.voitov.cryptoapp.domain.usecases.LoadDataUseCase
+import kotlinx.coroutines.launch
 
 class CoinPriceListViewModel(application: Application) : AndroidViewModel(application) {
     private val repository = CoinRepositoryImpl(application)
@@ -28,6 +30,8 @@ class CoinPriceListViewModel(application: Application) : AndroidViewModel(applic
     }
 
     private fun loadData() {
-        loadDataUseCase()
+        viewModelScope.launch {
+            loadDataUseCase()
+        }
     }
 }

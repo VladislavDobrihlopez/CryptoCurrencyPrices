@@ -5,7 +5,7 @@ import com.voitov.cryptoapp.domain.CoinRepository
 class LoadDataUseCase(
     private val repository: CoinRepository
 ) {
-    operator fun invoke() {
+    suspend operator fun invoke() {
         repository.loadData()
     }
 }

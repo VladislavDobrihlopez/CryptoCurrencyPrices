@@ -2,11 +2,11 @@ package com.voitov.cryptoapp.presentation
 
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.voitov.cryptoapp.R
@@ -29,7 +29,7 @@ class CoinDetailsActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(this).get(CoinPriceListViewModel::class.java)
 
-        val fromSymbol = intent.getStringExtra(EXTRA_FROM_SYMBOL) ?: ""
+        val fromSymbol = intent.getStringExtra(EXTRA_FROM_SYMBOL) ?: EMPTY_SYMBOL
 
         viewModel.getCoinDetails(fromSymbol).observe(this) {
             Log.d(TAG, it.toString())
@@ -60,6 +60,7 @@ class CoinDetailsActivity : AppCompatActivity() {
     companion object {
         private const val TAG = "CoinDetailsActivity"
         private const val EXTRA_FROM_SYMBOL = "FROM_SYMBOL"
+        private const val EMPTY_SYMBOL = ""
         fun newIntent(context: Context, fromSymbol: String): Intent {
             return Intent(context, CoinDetailsActivity::class.java).apply {
                 putExtra(EXTRA_FROM_SYMBOL, fromSymbol)
