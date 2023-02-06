@@ -38,15 +38,15 @@ class RefreshDataWorker(
 
         fun makeRequest(): OneTimeWorkRequest {
             return OneTimeWorkRequestBuilder<RefreshDataWorker>().build()
-            //            .apply {
-//                setConstraints(createConstraints())
-//            }.build()
+//                .apply {
+//                    setConstraints(createConstraints())
+//                }.build()
         }
 
         private fun createConstraints(): Constraints {
             return Constraints.Builder()
-                //.setRequiredNetworkType(NetworkType.NOT_ROAMING)
-                //.setRequiresBatteryNotLow(true)
+//                .setRequiredNetworkType(NetworkType.NOT_ROAMING)
+//                .setRequiresBatteryNotLow(true)
                 .build()
         }
     }

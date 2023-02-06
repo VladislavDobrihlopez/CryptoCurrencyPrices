@@ -22,11 +22,18 @@ interface DataModule {
     fun bindLocalDataSource(impl: LocalDataSourceImpl): LocalDataSource
 
     companion object {
+        @ApplicationScope
         @Provides
         fun provideDao(
             application: Application,
         ): CoinInfoDao {
             return AppDatabase.getInstance(application).coinInfo()
+        }
+
+        @ApplicationScope
+        @Provides
+        fun provideApiService(): ApiService {
+            return ApiFactory.apiService
         }
     }
 }

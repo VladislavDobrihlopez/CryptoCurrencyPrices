@@ -7,8 +7,9 @@ import androidx.work.WorkerParameters
 import com.voitov.cryptoapp.data.database.CoinInfoDao
 import com.voitov.cryptoapp.data.mapper.CoinInfoMapper
 import com.voitov.cryptoapp.data.network.ApiService
+import javax.inject.Inject
 
-class RefreshDataWorkerFactory(
+class RefreshDataWorkerFactory @Inject constructor(
     private val apiService: ApiService,
     private val dao: CoinInfoDao,
     private val mapper: CoinInfoMapper,
