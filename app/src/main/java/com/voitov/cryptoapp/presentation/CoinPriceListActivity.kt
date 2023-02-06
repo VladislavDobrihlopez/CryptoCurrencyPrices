@@ -9,17 +9,24 @@ import com.voitov.cryptoapp.R
 import com.voitov.cryptoapp.databinding.ActivityCoinPriceListBinding
 import com.voitov.cryptoapp.domain.entities.CoinInfo
 import com.voitov.cryptoapp.presentation.adapters.CoinInfoListAdapter
+import javax.inject.Inject
 
 class CoinPriceListActivity : AppCompatActivity() {
     private val TAG = "CoinPriceListActivity"
 
-    private lateinit var viewModel: CoinPriceListViewModel
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+
+    private val viewModel: CoinPriceListViewModel by lazy {
+        ViewModelProvider(this, viewModelFactory).get(CoinPriceListViewModel::class.java)
+    }
     private lateinit var adapter: CoinInfoListAdapter
     private val binding by lazy {
         ActivityCoinPriceListBinding.inflate(layoutInflater)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        (application as App).component.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         setupRecyclerView()
@@ -38,8 +45,6 @@ class CoinPriceListActivity : AppCompatActivity() {
     }
 
     private fun setupViewModel() {
-        viewModel = ViewModelProvider(this).get(CoinPriceListViewModel::class.java)
-
         viewModel.getCoinData().observe(this, Observer {
             Log.d(TAG, it.toString())
             adapter.submitList(it)

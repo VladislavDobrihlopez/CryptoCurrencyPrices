@@ -8,6 +8,6 @@ data class CoinInfo(
     val lastTradeId: String? = null,
     val highDay: Double? = null,
     val lowDay: Double? = null,
-    val lastMarket: String? = null,
+    val lastMarket: String,
     val imageUrl: String,
 )

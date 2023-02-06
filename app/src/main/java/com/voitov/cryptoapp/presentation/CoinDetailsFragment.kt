@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.voitov.cryptoapp.databinding.FragmentCoinDetailsBinding
+import javax.inject.Inject
 
 
 class CoinDetailsFragment : Fragment() {
@@ -18,6 +19,10 @@ class CoinDetailsFragment : Fragment() {
         get() = _binding ?: throw RuntimeException()
     private lateinit var viewModel: CoinPriceListViewModel
     private lateinit var fromSymbol: String
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         parseArguments()
@@ -41,8 +46,10 @@ class CoinDetailsFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        (requireActivity().application as App).component.inject(this)
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider(this).get(CoinPriceListViewModel::class.java)
+        viewModel =
+            ViewModelProvider(this, viewModelFactory).get(CoinPriceListViewModel::class.java)
 
         viewModel.getCoinDetails(fromSymbol).observe(viewLifecycleOwner) {
             Log.d(TAG, it.toString())
