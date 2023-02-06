@@ -1,45 +1,39 @@
 package com.voitov.cryptoapp.data.repository
 
-import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-import androidx.work.ExistingWorkPolicy
-import androidx.work.WorkManager
-import com.voitov.cryptoapp.data.database.AppDatabase
+import com.voitov.cryptoapp.data.datasource.LocalDataSource
+import com.voitov.cryptoapp.data.datasource.RemoteDataSource
 import com.voitov.cryptoapp.data.mapper.CoinInfoMapper
-import com.voitov.cryptoapp.data.workers.RefreshDataWorker
+import com.voitov.cryptoapp.di.ApplicationScope
 import com.voitov.cryptoapp.domain.CoinRepository
 import com.voitov.cryptoapp.domain.entities.CoinInfo
+import javax.inject.Inject
 
-class CoinRepositoryImpl(
-    private val application: Application
+@ApplicationScope
+class CoinRepositoryImpl @Inject constructor(
+    private val mapper: CoinInfoMapper,
+    private val localDataSource: LocalDataSource,
+    private val remoteDataSource: RemoteDataSource,
 ) : CoinRepository {
-    private val dao = AppDatabase.getInstance(application).coinInfo()
-    private val mapper = CoinInfoMapper()
-
     override fun getCoinInfoList(): LiveData<List<CoinInfo>> {
         return MediatorLiveData<List<CoinInfo>>().apply {
-            addSource(dao.getCoinData()) {
+            addSource(localDataSource.getCoinInfoList()) {
                 value = mapper.mapDbModelListToEntityList(it)
             }
         }
     }
 
-    override fun loadData() {
-        val workManager = WorkManager.getInstance(application)
-        workManager.enqueueUniqueWork(
-            RefreshDataWorker.NAME,
-            ExistingWorkPolicy.REPLACE,
-            RefreshDataWorker.makeRequest()
-        )
-    }
-
     override fun getCoinInfo(fromSymbol: String): LiveData<CoinInfo> {
         return MediatorLiveData<CoinInfo>().apply {
-            addSource(dao.getDetailedCoin(fromSymbol)) {
+            addSource(localDataSource.getCoinInfo(fromSymbol)) {
                 value = mapper.mapDbModelToEntity(it)
             }
         }
+    }
+
+    override fun loadData() {
+        remoteDataSource.loadData()
     }
 
     companion object {
