@@ -1,6 +1,7 @@
 package com.voitov.cryptoapp.di
 
 import android.app.Application
+import com.voitov.cryptoapp.presentation.App
 import com.voitov.cryptoapp.presentation.CoinDetailsFragment
 import com.voitov.cryptoapp.presentation.CoinPriceListActivity
 import dagger.BindsInstance
@@ -11,6 +12,7 @@ import dagger.Component
 interface ApplicationComponent {
     fun inject(activity: CoinPriceListActivity)
     fun inject(fragment: CoinDetailsFragment)
+    fun inject(application: App)
 
     @Component.Factory
     interface ApplicationComponentFactory {
