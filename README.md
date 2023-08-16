@@ -2,6 +2,8 @@
 ### Idea
 Application for viewing the price of cryptocurrency and brief information about it 
 
+api: "[https://min-api.cryptocompare.com/data/](https://www.cryptocompare.com)"
+
 ### Stack
 * __kotlin__
 * __android view__
