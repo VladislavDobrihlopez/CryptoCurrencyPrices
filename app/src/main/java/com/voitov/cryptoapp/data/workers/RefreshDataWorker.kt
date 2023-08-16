@@ -2,20 +2,24 @@ package com.voitov.cryptoapp.data.workers
 
 import android.content.Context
 import android.util.Log
-import androidx.work.*
-import com.voitov.cryptoapp.data.database.AppDatabase
+import androidx.work.Constraints
+import androidx.work.CoroutineWorker
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequest
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkerParameters
+import com.voitov.cryptoapp.data.database.CoinInfoDao
 import com.voitov.cryptoapp.data.mapper.CoinInfoMapper
-import com.voitov.cryptoapp.data.network.ApiFactory
+import com.voitov.cryptoapp.data.network.ApiService
 import kotlinx.coroutines.delay
 
 class RefreshDataWorker(
     context: Context,
-    workerParameters: WorkerParameters
+    workerParameters: WorkerParameters,
+    private val apiService: ApiService,
+    private val dao: CoinInfoDao,
+    private val mapper: CoinInfoMapper,
 ) : CoroutineWorker(context, workerParameters) {
-    private val apiService = ApiFactory.apiService
-    private val dao = AppDatabase.getInstance(context).coinInfo()
-    private val mapper = CoinInfoMapper()
-
     override suspend fun doWork(): Result {
         while (true) {
             Log.d(TAG, "doWork")
@@ -27,6 +31,7 @@ class RefreshDataWorker(
                 val coinInfoDbModelList = mapper.mapDtoListToDbModelList(coinInfoDtoList)
                 dao.insertCoinInfoList(coinInfoDbModelList)
             } catch (e: Exception) {
+                Log.d(TAG, e.message.toString())
             }
             delay(TIME_INTERVAL_IN_MILLIS)
         }
@@ -38,16 +43,16 @@ class RefreshDataWorker(
         const val NAME = "RefreshDataWorker"
 
         fun makeRequest(): OneTimeWorkRequest {
-            return OneTimeWorkRequestBuilder<RefreshDataWorker>().build()
-            //            .apply {
-//                setConstraints(createConstraints())
-//            }.build()
+            return OneTimeWorkRequestBuilder<RefreshDataWorker>()
+                .apply {
+                    setConstraints(createConstraints())
+                }.build()
         }
 
         private fun createConstraints(): Constraints {
             return Constraints.Builder()
-                //.setRequiredNetworkType(NetworkType.NOT_ROAMING)
-                //.setRequiresBatteryNotLow(true)
+                .setRequiredNetworkType(NetworkType.NOT_ROAMING)
+                .setRequiresBatteryNotLow(true)
                 .build()
         }
     }

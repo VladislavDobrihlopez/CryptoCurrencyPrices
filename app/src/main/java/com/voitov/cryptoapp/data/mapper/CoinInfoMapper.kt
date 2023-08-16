@@ -6,12 +6,15 @@ import com.voitov.cryptoapp.data.network.ApiFactory
 import com.voitov.cryptoapp.data.network.models.CoinInfoDto
 import com.voitov.cryptoapp.data.network.models.CoinInfoJsonHolderDto
 import com.voitov.cryptoapp.data.network.models.CoinNamesListDto
+import com.voitov.cryptoapp.di.ApplicationScope
 import com.voitov.cryptoapp.domain.entities.CoinInfo
 import java.sql.Timestamp
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 
-class CoinInfoMapper {
+@ApplicationScope
+class CoinInfoMapper @Inject constructor() {
     fun mapDtoToDbModel(coinInfoDto: CoinInfoDto): CoinInfoDbModel {
         return CoinInfoDbModel(
             fromSymbol = coinInfoDto.fromSymbol,
@@ -35,7 +38,7 @@ class CoinInfoMapper {
             lastTradeId = CoinInfoDbModel.lastTradeId,
             highDay = CoinInfoDbModel.highDay,
             lowDay = CoinInfoDbModel.lowDay,
-            lastMarket = CoinInfoDbModel.lastMarket,
+            lastMarket = CoinInfoDbModel.lastMarket.toString(),
             imageUrl = CoinInfoDbModel.imageUrl,
         )
     }
